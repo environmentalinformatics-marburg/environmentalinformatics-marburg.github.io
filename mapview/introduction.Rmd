@@ -17,8 +17,12 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 This online documentation to **mapview** provides the following chapters:
 
-* [mapview basics]()
-* [popups](popups/html/popups.html)
+1. [mapview basics]()
+2. [advanced controls]()
+3. [popups](popups/html/popups.html)
+4. [latticeView & sync]()
+4. [big data]()
+5. [miscellaneous]()
 
 ------
 
@@ -56,6 +60,8 @@ By default `mapView()` provides five base layers between which one can toggle (a
 * Thunderforest.Landscape
 * OpenTopoMap
 
+Furthermore, a mouse coordinates strip is displayed at the top of the map giving information about the current mouse position and zoom level. Additionally, if the installed **leaflet** version permits, a scale bar is provided and labels are shown when hovering over a feature.
+
 Depending on the object and/or argument settings one or several layers are created (each with or without it’s own legend) that can also be toggled. Note that in order to render properly, all layers need to be re-projected to leaflet’s underlying web mercator projection
 
 +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
@@ -71,3 +77,6 @@ library(mapview)
 mapview(breweries91)
 ```
 
+------
+
+For a more detailed introduction to the basic features of **mapview** see the next chapter on [mapview basics]()
