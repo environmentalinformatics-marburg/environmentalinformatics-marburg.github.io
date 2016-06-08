@@ -1,0 +1,66 @@
+---
+title: "mapview"
+output:
+  html_document:
+    clean: no
+    code_folding: show
+    fig_width: 9.47
+    keep_md: yes
+    toc: yes
+---
+
+![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
+
+This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+## Introduction
+
+**mapview** is an R package created to help researchers during their spatial data analysis workflow. It provides functions to very quickly and conveniently create interactive visualisations of spatial data.
+
+**mapview** was created o fill the gap of quick (not presentation grade) interactive plotting to examine and visually investigate spatial data. So far, one had to either:
+
+* (sp)plot the data in R and then toggle back and forth between the static plots (I use RStudio) or
+* save the data to the disk and then open in QGIS or similar to interactively examine the results.
+
+The main workhorse function is `mapView()` and is currently defined for:
+
+* [raster](https://cran.r-project.org/web/packages/raster/index.html) *objects (Layer, Stack, Brick) and SpatialPixelsDataFrame
+* [sp](https://cran.r-project.org/web/packages/sp/index.html) *objects (Points, Polygons, Lines and their DataFrame version)
+* [satellite](https://cran.r-project.org/web/packages/satellite/index.html) *objects
+
+**mapview** is in large parts based on RStudios **leaflet** package, though in order to aid general spatial analysis workflow, we have added a few special functions.
+
+------
+
+## General design
+
+A call to `mapView()` will return an object of class `mapview`. This class has 2 slots:
+
+* @object - a list of the objects that are displayed on the map. This means that this slot will contain the re-projected (and in the case of Raster objects possibly re-sampled) objects which enables tracing of the modifications that took place.
+* @map - the **leaflet** map. This is an S3 class object (see **leaflet** package documentation for details on the specifics).
+
+By default `mapView()` provides five base layers between which one can toggle (a preview of leaflet layers can be found [here](http://leaflet-extras.github.io/leaflet-providers/preview/)):
+
+* CartoDB.Positron (the default active layer)
+* OpenStreetMap
+* Esri.WorldImagery
+* Thunderforest.Landscape
+* OpenTopoMap
+
+Depending on the object and/or argument settings one or several layers are created (each with or without it’s own legend) that can also be toggled. Note that in order to render properly, all layers need to be re-projected to leaflet’s underlying web mercator projection
+
++proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+
+which in the case of large Raster* objects or Spatial objects with lots of features can be time consuming.
+
+------
+
+Here's what a basic call to `mapview()` will look like
+
+```{r mapview, message = FALSE}
+library(mapview)
+mapview(breweries91)
+```
+
