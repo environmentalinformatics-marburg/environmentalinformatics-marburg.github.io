@@ -6,12 +6,19 @@ output:
     code_folding: show
     fig_width: 9.47
     keep_md: yes
-    toc: yes
+    toc: no
 ---
 
 ![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
 
 This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+This online documentation to **mapview** provides the following chapters:
+
+* [mapview basics]()
+* [popups](popups/html/popups.html)
 
 ------
 
