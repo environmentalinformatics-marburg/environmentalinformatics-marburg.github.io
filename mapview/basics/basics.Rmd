@@ -4,9 +4,11 @@ output:
   html_document:
     clean: no
     code_folding: show
-    fig_width: 9.47
+    fig_width: 8.43
     keep_md: yes
     theme: cerulean
+    toc: yes
+    toc_float: yes
 ---
 
 ![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
@@ -15,9 +17,169 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 ------
 
-```{r mapview, message = FALSE}
+**mapview** is intended to provide a quick and easy way to visualize/plot spatial data in an interactive manner. As such, a one-liner is enough to produce an interactive map view of the data. Methods are defined for all objects from packages **sp**, **raster** and **satellite**:
+
+## Vector data
+
+**mapview** includes 3 vector type data sets: 
+
+* `breweries91` - a `SpatialPointsDataFrame` of a selection of (micro-) breweries in Franconia, the region with the highest brewery density in the world.
+* `gadmCHE` - a `SpatialPolygonsDataFrame` of administrative boundaries fro Switzerland from [gadm](http://gadm.org/)
+* `atlStorms2005` - a `SpatialLinesDataFrame` of selected storm tracks in the Atlantic Ocean from 2005
+
+
+For vector data a call to `mapview()` without any further arguments will produce a default map view including:
+
+* a layers control to switch between 5 different background maps - the default of which is CartoDB.Positron as it provides a color neutral environment for the visulizes features
+* zoom control buttons provided by the underlying **leaflet** map
+* attribution information of the active map layer in the bottom right corener of the map
+* information on mouse position (in latitude and longitude) and zoom level of the current view
+* in case you have the latest version of **leaflet** installed the map will also have a scale bar in the bottom left corner and provide labels of feature IDs if you hover over the features. 
+* clicking on any feature will provide a standard table popup listing all attribute entries of the respective features.
+
+Here's an example for each vector type:
+
+### SpatialPoints(DataFrame)
+
+```{r points, message = FALSE}
 library(mapview)
-mapview()
+library(sp)
+
+mapview(breweries91)
+```
+
+------
+
+### SpatialPolygons(DataFrame)
+
+```{r polygons, message = FALSE}
+mapview(gadmCHE)
+```
+
+------
+
+### SpatialLines(DataFrame)
+
+```{r lines, message = FALSE}
+mapview(atlStorms2005)
+```
+
+------
+
+### Controlling attribute columns
+
+If we only want to plot certain columns of the attribute table we can use argument `zcol`. Each column will be rendered as a separate layer.
+
+```{r points zcol, message = FALSE}
+library(mapview)
+library(sp)
+
+mapview(breweries91, zcol = c("brewery", "village", "founded"))
+```
+
+------
+
+### Including legends
+
+We can also include legends for the layers. Be careful, though, as it is currently not possible to link legends to layers so we end up with too many legends to fit the viewer window if we want to visualize many layers. This is also the reason why legends are not shown by default.
+
+```{r points legend, message = FALSE}
+library(mapview)
+library(sp)
+
+mapview(breweries91, zcol = "founded", legend = TRUE)
+```
+
+------
+
+## Raster data
+
+**mapview** includes 2 raster type data sets: 
+
+* `poppendorf` - a `RasterBrick` including 5 bands of a landsat scene located in the same region as `breweries91`
+* `kiliNDVI` - a raw multiband raster data set of 23 16-day Aqua-MODIS [NDVI](https://en.wikipedia.org/wiki/Normalized_Difference_Vegetation_Index) layers of Mt. Kilimanajro in Tanzania for the year 2013. See [Detsch et al. 2016](http://www.sciencedirect.com/science/article/pii/S0034425716301006) for details on how this data set was created
+
+For raster data a call to `mapview()` without any further arguments will produce a default map view including:
+
+* a layers control to switch between 5 different background maps - the default of which is CartoDB.Positron as it provides a color neutral environment for the visulizes features
+* zoom control buttons provided by the underlying **leaflet** map
+* attribution information of the active map layer in the bottom right corener of the map
+* information on mouse position (in latitude and longitude) and zoom level of the current view
+* in case you have the latest version of **leaflet** installed the map will also have a scale bar in the bottom left corner and provide labels of feature IDs if you hover over the features
+* all cells containing NAs are rendered in light transparent grey (```r mapviewGetOption("na.color")```)
+* clicking on raster cells to get the respective cell values is currently not available, but we are working on a solution for this
+
+Here's an example for each raster type (including a `sp::SpatialPixelsDataFrame`):
+
+### RasterLayer
+
+```{r layer, message = FALSE}
+library(mapview)
+library(raster)
+
+raster_layer <- poppendorf[[5]]
+
+mapview(raster_layer)
+```
+
+### RasterStack/Brick
+
+This will produce one map view layer for each layer in the stack/brick. Use the layers control to switch between the layers. By default only the first layer is shown.
+
+```{r stack, message = FALSE}
+library(mapview)
+library(raster)
+
+mapview(poppendorf)
+```
+
+### SpatialGridDataFrame
+
+Depending on the number of attribute columns, this is either rendered as a RasterLayer or RasterBrick
+
+```{r grid, message = FALSE}
+library(mapview)
+library(raster)
+library(sp)
+
+# SpatialPixelsDataFrame
+data(meuse.grid)
+coordinates(meuse.grid) <- ~x+y
+proj4string(meuse.grid) <- CRS("+init=epsg:28992")
+gridded(meuse.grid) <- TRUE
+
+mapView(meuse.grid)
+```
+
+------
+
+Similar to the vector data functionality, if we want to render a certain column of the attribute table, we can use the `zcol` argument
+
+```{r grid zcol, message = FALSE}
+library(mapview)
+library(raster)
+library(sp)
+
+# SpatialPixelsDataFrame
+data(meuse.grid)
+coordinates(meuse.grid) <- ~x+y
+proj4string(meuse.grid) <- CRS("+init=epsg:28992")
+gridded(meuse.grid) <- TRUE
+
+mapView(meuse.grid, zcol = "soil")
+```
+
+------
+
+Identical to vector data plots use `legend = TRUE` to add legend(s) to raster visualizations.
+
+```{r layer legend, message = FALSE}
+library(mapview)
+library(raster)
+
+raster_layer <- poppendorf[[5]]
+
+mapview(raster_layer, legend = TRUE)
 ```
 
 ------
