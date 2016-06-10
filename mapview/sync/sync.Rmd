@@ -1,0 +1,44 @@
+---
+title: "latticeView & snyc"
+output:
+  html_document:
+    clean: no
+    code_folding: show
+    fig_width: 9.47
+    keep_md: yes
+    theme: cerulean
+---
+
+![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
+
+This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+### sync
+
+```{r sync, message = FALSE}
+library(mapview)
+library(sp)
+
+data(meuse)
+coordinates(meuse) <- ~x+y
+proj4string(meuse) <- CRS("+init=epsg:28992")
+
+## view different aspects of same data set
+m1 <- mapview(meuse, zcol = "soil", burst = TRUE)
+m2 <- mapview(meuse, zcol = "lead")
+m3 <- mapview(meuse, zcol = "landuse", map.types = "Esri.WorldImagery")
+m4 <- mapview(meuse, zcol = "dist.m")
+
+sync(m1, m2, m3, m4)
+```
+
+------
+
+### latticeView
+
+```{r lattice, message = FALSE}
+latticeView(m1, m2, m3, m4) # 4 panels
+```
+

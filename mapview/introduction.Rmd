@@ -6,7 +6,7 @@ output:
     code_folding: show
     fig_width: 9.47
     keep_md: yes
-    toc: no
+    theme: cerulean
 ---
 
 ![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
@@ -17,12 +17,13 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 This online documentation to **mapview** provides the following chapters:
 
-1. [mapview basics]()
-2. [advanced controls]()
+1. [mapview basics](basics/basics.html)
+2. [advanced controls](advanced/advanced.html)
 3. [popups](popups/html/popups.html)
-4. [latticeView & sync]()
-4. [big data]()
-5. [miscellaneous]()
+4. [sync & latticeView](sync/sync.html)
+5. [viewRGB](viewrgb/viewrgb.html)
+6. [cubeView](cubeview/cubeview.html)
+7. [slideView](sliceview/slideview.html)
 
 ------
 

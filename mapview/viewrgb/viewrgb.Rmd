@@ -1,0 +1,34 @@
+---
+title: "RGB images"
+output:
+  html_document:
+    clean: no
+    code_folding: show
+    fig_width: 9.47
+    keep_md: yes
+    theme: cerulean
+---
+
+![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
+
+This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+### True color
+
+```{r truecolor, message = FALSE}
+library(mapview)
+viewRGB(poppendorf, r = 4, g = 3, b = 2, map.types = "Esri.WorldImagery")
+```
+
+------
+
+### False color
+
+```{r falsecolor, message = FALSE}
+library(mapview)
+viewRGB(poppendorf, 5, 4, 3)
+```
+
+------

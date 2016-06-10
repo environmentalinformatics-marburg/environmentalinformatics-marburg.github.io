@@ -1,0 +1,33 @@
+---
+title: '"big" data support'
+output:
+  html_document:
+    clean: no
+    code_folding: show
+    fig_width: 9.47
+    keep_md: yes
+    theme: cerulean
+---
+
+![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
+
+This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+### points
+
+```{r big, message = FALSE}
+library(mapview)
+library(sp)
+library(ggmap)
+
+data(crime)
+crime <- crime[complete.cases(crime), ]
+coordinates(crime) <- ~ lon + lat
+proj4string(crime) <- CRS("+init=epsg:4326")
+
+mapview(crime)
+```
+
+------

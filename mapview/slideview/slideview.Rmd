@@ -1,0 +1,29 @@
+---
+title: "slideView"
+output:
+  html_document:
+    clean: no
+    code_folding: show
+    fig_width: 9.47
+    keep_md: yes
+    theme: cerulean
+---
+
+![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
+
+This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+### slideView
+
+```{r slide, message = FALSE}
+library(mapview)
+library(raster)
+
+stck1 <- subset(poppendorf, c(3, 4, 5))
+stck2 <- subset(poppendorf, c(2, 3, 4))
+slideView(stck1, stck2)
+```
+
+------
