@@ -26,3 +26,4 @@ proj4string(meuse) <- CRS("+init=epsg:28992")
 mapview(meuse, zcol = "soil", burst = TRUE)
 ```
 
+------

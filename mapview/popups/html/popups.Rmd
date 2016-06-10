@@ -4,7 +4,7 @@ author: ""
 output:
   html_document:
     clean: no
-    code_folding: hide
+    code_folding: show
     fig_width: 9.47
     keep_md: yes
     toc: yes
@@ -162,3 +162,5 @@ But let the Dude show us how this can be used...
 ```{r mapview popupIrame, echo=TRUE, message=FALSE}
 mapview(pnt, popup = mapview:::popupIframe("https://www.youtube.com/embed/iApz08Bh53w?autoplay=1", width = 300, height = 225))
 ```
+
+------
