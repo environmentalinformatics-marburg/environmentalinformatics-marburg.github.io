@@ -23,7 +23,7 @@ This online documentation to **mapview** provides the following chapters:
 4. [sync & latticeView](sync/sync.html)
 5. [viewRGB](viewrgb/viewrgb.html)
 6. [cubeView](cubeview/cubeview.html)
-7. [slideView](sliceview/slideview.html)
+7. [slideView](slideview/slideview.html)
 
 ------
 
