@@ -4,9 +4,11 @@ output:
   html_document:
     clean: no
     code_folding: show
-    fig_width: 9.47
+    fig_width: 8.43
     keep_md: yes
     theme: cerulean
+    toc: yes
+    toc_float: yes
 ---
 
 ![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
@@ -15,7 +17,82 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 ------
 
-```{r soil burst, message = FALSE}
+Despite the possibility to quickly plot spatial data with `mapview(x)`, `mapview()` has a set of arguments for finer control of the visualization. Depending on the object class, these are:
+
+**All types**
+
+* `map` - the **leaflet** or **mapview** map to use -> default NULL
+* `col.regions` - the color palette for coluring raster and polygon data -> default `viridisLite::inferno` for raster data and `viridisLite::viridis` for vector data
+* `at` - breakpoints used for the colouring -> default NULL meaning they are calculated automatically for the range of data
+* `na.color` - the color for NA values -> default `#BEBEBE80`
+* `map.types` - the types of the background maps -> default ```r mapview::mapviewGetOption("basemaps")``` see [here](http://leaflet-extras.github.io/leaflet-providers/preview/) for available map types
+* `alpha.regions` - the opacity of raster and polygon fills -> default `0.2` for polygons and `0.8` for rasters
+* `legend` - whether to add a legend to the plot -> default `FALSE`
+* `legend.opacity` - opacity of the legend -> default `1`
+* `verbose` - whether to print additional information to the console during the rendering -> default `FALSE`
+* `layer.name` - the layer name to be used for plotting -> default depends on call. For a single object the name of the object; if `zcol` is supplied a combination of object name and column name; for raster stack/bricks the layer names
+* ... - further arguments to be passed on to respective **leaflet** functions such as `addRasterImage` or `adCircleMarkers`
+
+**raster only**
+
+* `maxpixels` - the maximum number of pixels to plot -> default 500k. This is used so rendering doesn't take forever. This can also be set with `mapviewOptions()`
+* `use.layer.names` - whether to use the layer names of raster objects -> default `FALSE`
+* `trim` - should rasters be trimmed off NA values around the edges -> default `TRUE`
+
+**vector only**
+
+* `zcol` - attribute name(s) or column number(s) in attribute table of the column(s) to be rendered -> default `NULL` 
+* `burst` - whether to show all (TRUE) or only one (FALSE) layer(s) -> default `FALSE`
+* `color` - color (palette) for points/polygons/lines -> default `viridisLite::viridis`
+* `alpha` - opacity of the lines or points -> default `0.8`
+* `cex` - circle size for point data -> default `8`. This can also be used to map circle size to an attribute from the object's attribute table by supplying either column name or number
+* `lwd` - line width -> default 2
+* `label` - a character vector of labels to be shown on mouseover -> default feature IDs, if `zcol` is set the values of `zcol`
+* `popup` - the popup function to use for the popups -> default `popupTable()`. See [chapter on popups](../popups/html/popups.html) for further options
+
+------
+
+Here's a few examples of how selected arguments can be used:
+
+## col.regions & at
+
+Similar to `spplot` arguments `col.regions` and `at` can be used for finer control of the colouring
+
+```{r kili col.regions at, message = FALSE}
+library(mapview)
+library(raster)
+library(RColorBrewer)
+
+pal <- colorRampPalette(brewer.pal(9, "BrBG"))
+
+kili_data <- system.file("extdata", "kiliNDVI.tif", package = "mapview")
+kiliNDVI <- stack(kili_data)
+
+mapview(kiliNDVI[[1]], col.regions = pal(100), at = seq(-0.2, 1, 0.2), legend = TRUE)
+```
+
+
+```{r breweries col.regions at, message = FALSE}
+mapview(breweries91, zcol = "founded", at = seq(1400, 2200, 200), legend = TRUE)
+```
+
+------
+
+## map.types
+
+To use a different background map, use argument `map.types`
+
+```{r breweries map.types, message = FALSE}
+mapview(breweries91, map.types = c("CartoDB.DarkMatter", "OpenStreetMap.DE"), color = "grey40")
+```
+
+------
+
+## layer.name
+
+To individually label the layer names use argument `layer.name`
+
+```{r meuse layer.name, message = FALSE}
 library(mapview)
 library(sp)
 
@@ -23,7 +100,45 @@ data(meuse)
 coordinates(meuse) <- ~x+y
 proj4string(meuse) <- CRS("+init=epsg:28992")
 
-mapview(meuse, zcol = "soil", burst = TRUE)
+mapview(meuse, zcol = c("lead", "landuse"), 
+        layer.name = c("Concentration of lead", "Lanuse type"))
 ```
 
 ------
+
+## burst
+
+`burst` can be used to plot all layers of a Spatial*DataFrame object
+
+```{r meuse burst, message = FALSE}
+library(mapview)
+library(sp)
+
+data(meuse)
+coordinates(meuse) <- ~x+y
+proj4string(meuse) <- CRS("+init=epsg:28992")
+
+mapview(meuse, burst = TRUE)
+```
+
+when used together with `zcol`, `burst` will produce one layer for all unique values of `zcol`. 
+
+```{r meuse soil burst, message = FALSE}
+mapview(meuse, zcol = "soil", burst = TRUE, color = c("darkred", "forestgreen", "cornflowerblue"), legend = TRUE)
+```
+
+Note that for a column with many values there will likely not be enough space for the layers control - we are working on a solution for this issue.
+
+```{r breweries founded burst, message = FALSE}
+mapview(breweries91, zcol = "zipcode", burst = TRUE, legend = TRUE)
+```
+
+------
+
+## cex
+
+For `SpatialPointsDataFrames` the circle size can be mapped to one of the attributes
+
+```{r breweries cex founded, message = FALSE}
+mapview(meuse, zcol = "soil", cex = "cadmium")
+```
