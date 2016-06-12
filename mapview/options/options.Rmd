@@ -62,10 +62,10 @@ library(RColorBrewer)
 mapviewOptions(basemaps = c("CartoDB.DarkMatter", "OpenStreetMap.DE"),
                raster.palette = colorRampPalette(brewer.pal(9, "Greys")),
                vector.palette = colorRampPalette(brewer.pal(9, "YlGnBu")),
-               na.color = "pink",
+               na.color = "magenta",
                layers.control.pos = "topright")
 
-mapview(breweries91, zcol = "founded")
+mapview(breweries91, zcol = "founded", legend = TRUE)
 ```
 
 ------
@@ -73,7 +73,7 @@ mapview(breweries91, zcol = "founded")
 These options will now be available until the current session is closed. i.e. you quit R
 
 ```{r options rgb, message = FALSE}
-mapview(poppendorf[[5]], legend = TRUE)
+mapview(poppendorf[[5]])
 ```
 
 ```{r options rst, message = FALSE}

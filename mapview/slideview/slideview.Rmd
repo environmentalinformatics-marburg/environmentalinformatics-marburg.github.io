@@ -17,6 +17,8 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 ### slideView
 
+`slideView()` can be used with RasterLayer and RasterStack/Brick in which case RGB layers are assumed
+
 ```{r slide, message = FALSE}
 library(mapview)
 library(raster)

@@ -17,6 +17,8 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 ### sync
 
+`sync` lets you synchronise multiple maps
+
 ```{r sync, message = FALSE}
 library(mapview)
 library(sp)
@@ -26,10 +28,10 @@ coordinates(meuse) <- ~x+y
 proj4string(meuse) <- CRS("+init=epsg:28992")
 
 ## view different aspects of same data set
-m1 <- mapview(meuse, zcol = "soil", burst = TRUE)
-m2 <- mapview(meuse, zcol = "lead")
-m3 <- mapview(meuse, zcol = "landuse", map.types = "Esri.WorldImagery")
-m4 <- mapview(meuse, zcol = "dist.m")
+m1 <- mapview(breweries91, zcol = "brewery")
+m2 <- mapview(breweries91, zcol = "village")
+m3 <- mapview(breweries91, zcol = "founded", map.types = "Esri.WorldImagery")
+m4 <- leaflet() %>% addTiles() %>% addCircleMarkers(data = breweries91)
 
 sync(m1, m2, m3, m4)
 ```
@@ -38,8 +40,18 @@ sync(m1, m2, m3, m4)
 
 ### latticeView
 
+does as the name implies arrange multiple maps in a lattice on one page (like panels in package `lattice` or facets in package `gplot2`)
+
 ```{r lattice, message = FALSE}
-latticeView(m1, m2, m3, m4) # 4 panels
+latticeView(m1, m2, m3, m4)
+```
+
+------
+
+layout can be controlled with `ncol`
+
+```{r lattice ncol, message = FALSE}
+latticeView(m1, m2, m3, ncol = 1)
 ```
 
 ------

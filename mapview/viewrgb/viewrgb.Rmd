@@ -15,6 +15,8 @@ This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **ma
 
 ------
 
+`viewRGB` can be used to render rgb raster data on the map. This works similar to `raster::plotRGB`. Default values for the r, g, b channels are 3, 2, 1 respectively
+
 ### True color
 
 ```{r truecolor, message = FALSE}
