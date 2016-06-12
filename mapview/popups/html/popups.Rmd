@@ -155,6 +155,24 @@ mapview(pnt, map.types = "Esri.WorldImagery", popup = popupImage(img, src = "rem
 
 ------
 
+All major image types are supported (`jpg`, `png`, `svg` and (animated) `gif`)
+
+```{r mapview popupImage remote multiple, echo=TRUE, message=FALSE}
+images <- c("http://bit.ly/1TVwRiR",
+            "https://upload.wikimedia.org/wikipedia/commons/1/1b/R_logo.svg",
+            "https://www.r-project.org/logo/Rlogo.png",
+            "https://upload.wikimedia.org/wikipedia/commons/d/d6/MeanMonthlyP.gif")
+
+pt4 <- data.frame(x = jitter(rep(174.764474, 4), factor = 0.001),
+                  y = jitter(rep(-36.877245, 4), factor = 0.001))
+coordinates(pt4) <- ~ x + y
+proj4string(pt4) <- "+init=epsg:4326"
+
+mapview(pt4, popup = popupImage(images, src = "remote")) # NOTE the gif animation
+```
+
+------
+
 There's also a hidden function that enables us to include all sorts of things via Iframe (which is used internally when rendering **htmlwidgets** graphs).
 
 But let the Dude show us how this can be used...
