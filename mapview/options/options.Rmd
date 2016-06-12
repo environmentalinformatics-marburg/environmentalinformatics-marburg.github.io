@@ -60,7 +60,7 @@ To set certain options use `mapviewOptions()`
 library(RColorBrewer)
 
 mapviewOptions(basemaps = c("CartoDB.DarkMatter", "OpenStreetMap.DE"),
-               raster.palette = colorRampPalette(brewer.pal(9, "Spectral")),
+               raster.palette = colorRampPalette(brewer.pal(9, "Greys")),
                vector.palette = colorRampPalette(brewer.pal(9, "YlGnBu")),
                na.color = "pink",
                layers.control.pos = "topright")
