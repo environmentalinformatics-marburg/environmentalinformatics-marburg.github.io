@@ -1,0 +1,85 @@
+---
+title: "mapview options"
+output:
+  html_document:
+    clean: no
+    code_folding: show
+    fig_width: 9.47
+    keep_md: yes
+    theme: cerulean
+---
+
+![](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png) (CC-BY-NC-SA)
+
+This document was produced on _`r format(Sys.time(), "%a %b %d %Y")`_ using **mapview** version **`r packageVersion("mapview")`**
+
+------
+
+`mapviewOptions()` can be used to set several plotting parameters (arguments) globally, meaning that they will be valid for as long as the session is active.
+
+A call to `mapviewOptions()` will show all options and their default values in the console
+
+```{r options, message = FALSE}
+library(mapview)
+
+mapviewOptions()
+```
+
+----
+
+In detail, these are:
+
+* `platform` - the rendeing platform. At the moment, only `leaflet` is accepted but we are planning to implement more in the future
+* `basemaps` - the default `map.types` used by **mapview**
+* `raster.size` - the maximum number of bytes to allow for the projected raster image rendering (before base64 encoding) -> default 8MB
+* `mapview.maxpixels` - the maximum number of pixels to allow for raster image rendering on the map background -> default 500k
+* `plainview.maxpixels` - the maximum number of pixels to allow for plain raster image rendering without the map background -> default 1 Million
+* `maxpolygons` - the maximum number of polygons to allow for polygon rendering using standard **leaflet** (package) implementation. If an object has more features than this threshold, special canvas shader rendering is used. Note that this will result in less flexible rendering as many of the standard arguments will not be available (e.g. color mapping). -> default 30k
+* `maxpoints` - as for `maxpolygons` but for point features -> default 20k
+* `maxlines` - as for `maxpolygons` but for line features -> default 30k
+* `raster.palette` - the default palette used for rendering raster images -> default `viridisLite::inferno`
+* `vector.palette` - the default palette used for rendering vector features -> default `viridisLite::viridis`
+* `verbose` - whether to print more verbose information to the console during the rendering -> default `FALSE`
+* `na.color` - the color to be used for rendering NA values -> default `#BEBEBE80`
+* `legend` - whether to plot a legend -> default `FALSE`
+* `legend.pos` - where to position the legend if shown -> default `topright`
+* `layers.control.pos` - where to position the layers control on the map -> default `topleft`
+* `leafletWidth`, `leafletHeight` - the width and height of the map widget -> defaul `NULL` which means that the browser will be filled if possible
+
+------
+
+To get the current value of a certain option use `mapviewGetOption()`
+
+```{r options get, message = FALSE}
+mapviewGetOption("basemaps")
+```
+
+To set certain options use `mapviewOptions()`
+
+```{r options set, message = FALSE}
+library(RColorBrewer)
+
+mapviewOptions(basemaps = c("CartoDB.DarkMatter", "OpenStreetMap.DE"),
+               raster.palette = colorRampPalette(brewer.pal(9, "Spectral")),
+               vector.palette = colorRampPalette(brewer.pal(9, "YlGnBu")),
+               na.color = "pink",
+               layers.control.pos = "topright")
+
+mapview(breweries91, zcol = "founded")
+```
+
+------
+
+These options will now be available until the current session is closed. i.e. you quit R
+
+```{r options rgb, message = FALSE}
+mapview(poppendorf[[5]], legend = TRUE)
+```
+
+```{r options rst, message = FALSE}
+viewRGB(poppendorf, 5, 4, 3)
+```
+
+------
+
+To change these options permanently, i.e. across sessions, you could place a call to `mapviewOptions()` in your `.Rprofile` so that they will be set everytime you start R
