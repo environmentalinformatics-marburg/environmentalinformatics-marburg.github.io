@@ -162,8 +162,8 @@ images <- c("https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Mount_Ede
             "https://www.r-project.org/logo/Rlogo.png",
             "https://upload.wikimedia.org/wikipedia/commons/d/d6/MeanMonthlyP.gif")
 
-pt4 <- data.frame(x = jitter(rep(174.764474, 4), factor = 0.001),
-                  y = jitter(rep(-36.877245, 4), factor = 0.001))
+pt4 <- data.frame(x = jitter(rep(174.764474, 3), factor = 0.001),
+                  y = jitter(rep(-36.877245, 3), factor = 0.001))
 coordinates(pt4) <- ~ x + y
 proj4string(pt4) <- "+init=epsg:4326"
 
